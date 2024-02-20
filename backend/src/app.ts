@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDb } from "./dbConfig/db";
 import itemsRouter from "./routes/itemRoutes";
+import { ApiCounts } from "./models/apiCountModel";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -18,15 +19,6 @@ app.get("/", (req, res) => {
     res.send("Welcome! to express....");
 });
 
-app.get("/item", async (req, res) => {
-    try {
-        const [itemCount] = await ApiCounts.find();
-        return res.json(itemCount);
-    } catch (error) {
-        console.error("Error in /count route:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
 // Mount the itemsRouter at the '/items' path
 app.use("/items", itemsRouter);
 
