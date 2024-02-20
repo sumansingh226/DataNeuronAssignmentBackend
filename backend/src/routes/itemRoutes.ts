@@ -5,6 +5,7 @@ const getDb: any = {};
 
 const router = express.Router();
 const db: any = {};
+
 router.post("/add", async (req, res) => {
     try {
         const { name, description } = req.body;
@@ -41,9 +42,11 @@ router.get("/count", async (req: any, res: any) => {
             .collection("items")
             .countDocuments({ name: "update" });
         res.json({ addCount, updateCount });
-    } catch (error: any) {
-        console.log("err", error);
+    } catch (error) {
+        console.error("Error in /count route:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
+
 
 export default router;
