@@ -18,8 +18,14 @@ app.get("/", (req, res) => {
     res.send("Welcome! to express....");
 });
 
-app.get("/item", (req, res) => {
-    res.send("Welcome! to express....");
+app.get("/item", async (req, res) => {
+    try {
+        const [itemCount] = await ApiCounts.find();
+        return res.json(itemCount);
+    } catch (error) {
+        console.error("Error in /count route:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 // Mount the itemsRouter at the '/items' path
 app.use("/items", itemsRouter);
