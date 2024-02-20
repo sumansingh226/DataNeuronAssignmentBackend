@@ -7,7 +7,11 @@ require("dotenv").config();
  */
 export const connectDb = async (): Promise<void> => {
     // Retrieve the database connection URL from the environment variables
+    // const dbURI: string = process.env.CONNECTION_URL || "";
+
+    //unable to detact the env tempray for testing
     const dbURI: string = "mongodb+srv://summichauhan1234:summichauhan1234@cluster0.b29dk.mongodb.net/DataNeuron?retryWrites=true&w=majority";
+
     try {
         // Connect to the MongoDB database
         await mongoose.connect(dbURI, {
