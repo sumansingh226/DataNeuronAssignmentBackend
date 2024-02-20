@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDb } from "./dbConfig/db";
 import itemsRouter from "./routes/itemRoutes";
-import { ApiCounts } from "./models/apiCountModel";
 
 // Load environment variables from .env file
 dotenv.config();
