@@ -18,6 +18,9 @@ app.get("/", (req, res) => {
     res.send("Welcome! to express....");
 });
 
+app.get("/item", (req, res) => {
+    res.send("Welcome! to express....");
+});
 // Mount the itemsRouter at the '/items' path
 app.use("/items", itemsRouter);
 
