@@ -5,8 +5,7 @@ export const additem = (req: any, res: any) => {
     product
         .save()
         .then((result: any) => {
-            console.log("iTem Created successfully", result);
-            // res.redirect("/admin/products");
+            console.log("Item Created successfully", result);
         })
         .catch((err: any) => {
             console.log("Error creating item", err);
@@ -20,7 +19,6 @@ export const updateitem = async (req: any, res: any) => {
     const payload = { name, description };
     try {
         await Item.findByIdAndUpdate(id, payload, { new: false });
-        res.redirect("/admin/products");
     } catch (error) {
         console.error("Error updating item:", error);
     }
