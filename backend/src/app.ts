@@ -16,7 +16,7 @@ app.use(express.json());
 app.use("/items", itemsRouter);
 
 // Define the port to listen on, defaulting to 50000 if not specified in the environment
-const PORT = process.env.PORT || 50000;
+const PORT = process.env.PORT || 5000;
 
 // Connect to the database and start the server
 const startServer = async () => {
