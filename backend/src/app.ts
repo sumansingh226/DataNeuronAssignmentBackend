@@ -2,12 +2,21 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDb } from "./dbConfig/db";
 import itemsRouter from "./routes/itemRoutes";
+import cors from "cors";
 
 // Load environment variables from .env file
 dotenv.config();
 
+
+
+
 // Create an Express application
 const app = express();
+
+// Allow requests from localhost:3000
+app.use(cors({
+    origin: "http://localhost:3000"
+}));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
