@@ -1,51 +1,135 @@
-import React, { useState } from "react";
-import { TextField, Button, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { addItem, fetchApiCounts, updateItemById } from "./AddItemServices";
 
-interface AddItemFormProps {
-  onAddItem: (item: { name: string; description: string }) => void;
+const useStyles = makeStyles({
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    maxWidth: "400px",
+    margin: "auto",
+    padding: "1rem",
+    marginBottom: 1,
+  },
+  itemList: {
+    border: "1px solid gray",
+    marginTop: "2rem",
+    padding: "1rem",
+  },
+  listItem: {
+    cursor: "pointer",
+  },
+});
+
+interface Item {
+  _id?: any;
+  name: string;
+  description: string;
 }
 
-const AddItemForm: React.FC<AddItemFormProps> = ({ onAddItem }) => {
-  const [itemName, setItemName] = useState("");
-  const [description, setDescription] = useState("");
+const AddItemForm: React.FC = () => {
+  const classes = useStyles();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [items, setItems] = useState<Item[]>([]);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [addApiCalls, setAddApiCalls] = useState<number>(0);
+  const [updateApiCalls, setUpdateApiCalls] = useState<number>(0);
+
+  useEffect(() => {
+    getApisCounts();
+  }, []);
+
+  const getApisCounts = async () => {
+    try {
+      const data: any = await fetchApiCounts();
+      setAddApiCalls(data.addApiCount);
+      setUpdateApiCalls(data.updateApiCount);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onAddItem({ name: itemName, description });
-    setItemName("");
+    if (!name.trim() || !description.trim()) return;
+    if (selectedItem) {
+      const updatedItems = items.map((item) =>
+        item._id === selectedItem._id ? { ...item, name, description } : item
+      );
+      setItems(updatedItems);
+      setSelectedItem(null);
+      updateItemById("65d5238627968decdb2530fb");
+    } else {
+      const newItem: Item = {
+        name,
+        description,
+      };
+      setItems([...items, newItem]);
+      addItem(newItem);
+    }
+    setName("");
     setDescription("");
   };
 
+  const handleItemClick = (item: Item) => {
+    setSelectedItem(item);
+    setName(item.name);
+    setDescription(item.description);
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+    <Box>
+      <Paper className={classes.form} elevation={3}>
+        <Typography variant="h5">
+          {selectedItem ? "Edit Item" : "Add Item"}
+        </Typography>
+
+        <form onSubmit={handleSubmit}>
           <TextField
-            label="Item Name"
-            variant="outlined"
-            fullWidth
-            value={itemName}
-            onChange={(e) => setItemName(e.target.value)}
+            sx={{ p: 1, m: 1 }}
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
           />
-        </Grid>
-        <Grid item xs={12}>
           <TextField
+            sx={{ p: 1, m: 1 }}
             label="Description"
-            variant="outlined"
-            fullWidth
-            multiline
-            rows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            required
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary">
-            Add Item
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Button
+              sx={{ p: 1, m: 1 }}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              {selectedItem ? "Edit Item" : "Add Item"}
+            </Button>
+
+            <Box>
+              <Typography>Add API Calls: {addApiCalls}</Typography>
+              <Typography>Update API Calls: {updateApiCalls}</Typography>
+            </Box>
+          </Box>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 

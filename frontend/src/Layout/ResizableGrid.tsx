@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
+import AddItemForm from "../Forms/AddItem";
 import useStyles from "./ResizableGrid.Styles";
 
 const ResizableComponent: React.FC = () => {
@@ -42,26 +43,7 @@ const ResizableComponent: React.FC = () => {
 
   return (
     // <Draggable>
-    <div>
-      <div
-        ref={ref}
-        className={classes.resizable}
-        style={{ width: size.width, height: size.height }}
-        onMouseDown={handleMouseDown}
-      >
-        <div className={`${classes.handle} ${classes.topLeft}`} />
-        <div className={`${classes.handle} ${classes.topRight}`} />
-        <div className={`${classes.handle} ${classes.bottomLeft}`} />
-        <div className={`${classes.handle} ${classes.bottomRight}`} />
-        Resizable Component
-      </div>
-      <div className={classes.resizable} style={{ width: 300, height: 300 }}>
-        Fixed Size 1
-      </div>
-      <div className={classes.resizable} style={{ width: 400, height: 400 }}>
-        Fixed Size 2
-      </div>
-    </div>
+    <AddItemForm />
     // </Draggable>
   );
 };
