@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
   Box,
+  TablePagination,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
@@ -26,17 +27,22 @@ const useStyles = makeStyles({
     flexDirection: "column",
     gap: "1rem",
     maxWidth: "400px",
-    margin: "auto",
-    padding: "1rem",
+    marginTop: "2rem",
+    marginLeft: "1rem",
+    padding: "2rem",
     marginBottom: 1,
   },
   itemList: {
     border: "1px solid gray",
-    marginTop: "2rem",
     padding: "1rem",
   },
   listItem: {
     cursor: "pointer",
+  },
+  container: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
 });
 
@@ -56,6 +62,8 @@ const AddItemForm: React.FC = () => {
     selectedItem: Item | null;
     addApiCalls: number;
     updateApiCalls: number;
+    page: number;
+    rowsPerPage: number;
   }>({
     name: "",
     description: "",
@@ -63,6 +71,8 @@ const AddItemForm: React.FC = () => {
     selectedItem: null,
     addApiCalls: 0,
     updateApiCalls: 0,
+    page: 0,
+    rowsPerPage: 5,
   });
 
   const {
@@ -72,25 +82,43 @@ const AddItemForm: React.FC = () => {
     selectedItem,
     addApiCalls,
     updateApiCalls,
+    page,
+    rowsPerPage,
   } = state;
 
   useEffect(() => {
-    getApisCounts();
-  }, []);
+    fetchInitialData();
+  }, [addApiCalls, updateApiCalls, items]);
 
-  const getApisCounts = async () => {
+  const fetchInitialData = async () => {
     try {
-      const data: any = await fetchApiCounts();
-      const allItems: any[] = await fetchItems();
+      const [apiCounts, allItems] = await Promise.all([
+        fetchApiCounts(),
+        fetchItems(),
+      ]);
       setState((prevState) => ({
         ...prevState,
-        addApiCalls: data.addApiCount,
-        updateApiCalls: data.updateApiCount,
-        items: [...allItems],
+        addApiCalls: apiCounts.addApiCount,
+        updateApiCalls: apiCounts.updateApiCount,
+        items: allItems,
       }));
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching initial data:", error);
     }
+  };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setState((prevState) => ({ ...prevState, page: newPage }));
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setState((prevState) => ({
+      ...prevState,
+      rowsPerPage: parseInt(event.target.value, 10),
+      page: 0,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -108,7 +136,7 @@ const AddItemForm: React.FC = () => {
         }));
         await Promise.allSettled([
           updateItemById(selectedItem._id, selectedItem),
-          getApisCounts(),
+          fetchInitialData(),
         ]);
       } else {
         const newItem: Item = { name, description };
@@ -116,7 +144,7 @@ const AddItemForm: React.FC = () => {
           ...prevState,
           items: [...items, newItem],
         }));
-        await Promise.allSettled([addItem(newItem), getApisCounts()]);
+        await Promise.allSettled([addItem(newItem), fetchInitialData()]);
       }
       setState((prevState) => ({
         ...prevState,
@@ -127,7 +155,6 @@ const AddItemForm: React.FC = () => {
       console.error("Error handling form submission:", error);
     }
   };
-
   const handleItemClick = (item: Item) => {
     setState((prevState) => ({
       ...prevState,
@@ -139,51 +166,50 @@ const AddItemForm: React.FC = () => {
 
   return (
     <Box>
-      <Paper className={classes.form} elevation={3}>
-        <Typography variant="h5">
-          {selectedItem ? "Edit Item" : "Add Item"}
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            sx={{ p: 1, m: 1 }}
-            label="Name"
-            value={name}
-            onChange={(e) => {
-              setState({ ...state, name: e.target.value });
-              if (selectedItem) {
-                const updatedSelectedItem = {
-                  ...selectedItem,
-                  name: e.target.value,
-                };
-                setState((prevState) => ({
-                  ...prevState,
-                  selectedItem: updatedSelectedItem,
-                }));
-              }
-            }}
-            required
-          />
-          <TextField
-            sx={{ p: 1, m: 1 }}
-            label="Description"
-            value={description}
-            onChange={(e) => {
-              setState({ ...state, description: e.target.value });
-              if (selectedItem) {
-                const updatedSelectedItem = {
-                  ...selectedItem,
-                  description: e.target.value,
-                };
-                setState((prevState) => ({
-                  ...prevState,
-                  selectedItem: updatedSelectedItem,
-                }));
-              }
-            }}
-            required
-          />
-
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box className={classes.container}>
+        <Paper className={classes.form} elevation={3}>
+          <Typography variant="h5">
+            {selectedItem ? "Edit Item" : "Add Item"}
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              sx={{ p: 1, m: 1 }}
+              label="Name"
+              value={name}
+              onChange={(e) => {
+                setState({ ...state, name: e.target.value });
+                if (selectedItem) {
+                  const updatedSelectedItem = {
+                    ...selectedItem,
+                    name: e.target.value,
+                  };
+                  setState((prevState) => ({
+                    ...prevState,
+                    selectedItem: updatedSelectedItem,
+                  }));
+                }
+              }}
+              required
+            />
+            <TextField
+              sx={{ p: 1, m: 1 }}
+              label="Description"
+              value={description}
+              onChange={(e) => {
+                setState({ ...state, description: e.target.value });
+                if (selectedItem) {
+                  const updatedSelectedItem = {
+                    ...selectedItem,
+                    description: e.target.value,
+                  };
+                  setState((prevState) => ({
+                    ...prevState,
+                    selectedItem: updatedSelectedItem,
+                  }));
+                }
+              }}
+              required
+            />
             <Button
               sx={{ p: 1, m: 1 }}
               type="submit"
@@ -192,39 +218,49 @@ const AddItemForm: React.FC = () => {
             >
               {selectedItem ? "Edit Item" : "Add Item"}
             </Button>
-
             <Box>
               <Typography>Add API Calls: {addApiCalls}</Typography>
               <Typography>Update API Calls: {updateApiCalls}</Typography>
             </Box>
-          </Box>
-        </form>
-      </Paper>
-      <Box sx={{ p: 2 }}>
-        <Paper>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Description</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {items.map((item, index) => (
-                  <TableRow
-                    key={index}
-                    onClick={() => handleItemClick(item)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.description}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          </form>
         </Paper>
+        <Box sx={{ p: 2, width: "100%" }}>
+          <Paper className={classes.itemList}>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Description</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {items
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((item, index) => (
+                      <TableRow
+                        key={index}
+                        onClick={() => handleItemClick(item)}
+                        className={classes.listItem}
+                      >
+                        <TableCell>{item.name}</TableCell>
+                        <TableCell>{item.description}</TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5]}
+              component="div"
+              count={items.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </Box>
       </Box>
     </Box>
   );
