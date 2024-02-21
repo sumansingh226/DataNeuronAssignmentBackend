@@ -4,13 +4,21 @@ import {
   TextField,
   Typography,
   Paper,
-  List,
-  ListItem,
-  ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Box,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { addItem, fetchApiCounts, updateItemById } from "./AddItemServices";
+import {
+  addItem,
+  fetchApiCounts,
+  fetchItems,
+  updateItemById,
+} from "./AddItemServices";
 
 const useStyles = makeStyles({
   form: {
@@ -73,10 +81,12 @@ const AddItemForm: React.FC = () => {
   const getApisCounts = async () => {
     try {
       const data: any = await fetchApiCounts();
+      const allItems: any[] = await fetchItems();
       setState((prevState) => ({
         ...prevState,
         addApiCalls: data.addApiCount,
         updateApiCalls: data.updateApiCount,
+        items: [...allItems],
       }));
     } catch (error) {
       console.error(error);
@@ -88,8 +98,8 @@ const AddItemForm: React.FC = () => {
     if (!name.trim() || !description.trim()) return;
     try {
       if (selectedItem) {
-        const updatedItems = items.map((item) =>
-          item._id === selectedItem._id ? { ...item, name, description } : item
+        const updatedItems = items.filter(
+          (item) => item._id === selectedItem._id
         );
         setState((prevState) => ({
           ...prevState,
@@ -97,7 +107,7 @@ const AddItemForm: React.FC = () => {
           selectedItem: null,
         }));
         await Promise.allSettled([
-          updateItemById(selectedItem._id),
+          updateItemById(selectedItem._id, selectedItem),
           getApisCounts(),
         ]);
       } else {
@@ -128,49 +138,95 @@ const AddItemForm: React.FC = () => {
   };
 
   return (
-    <Paper className={classes.form} elevation={3}>
-      <Typography variant="h5">
-        {selectedItem ? "Edit Item" : "Add Item"}
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          sx={{ p: 1, m: 1 }}
-          label="Name"
-          value={name}
-          onChange={(e) => setState({ ...state, name: e.target.value })}
-          required
-        />
-        <TextField
-          sx={{ p: 1, m: 1 }}
-          label="Description"
-          value={description}
-          onChange={(e) => setState({ ...state, description: e.target.value })}
-          required
-        />
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button
+    <Box>
+      <Paper className={classes.form} elevation={3}>
+        <Typography variant="h5">
+          {selectedItem ? "Edit Item" : "Add Item"}
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
             sx={{ p: 1, m: 1 }}
-            type="submit"
-            variant="contained"
-            color="primary"
-          >
-            {selectedItem ? "Edit Item" : "Add Item"}
-          </Button>
+            label="Name"
+            value={name}
+            onChange={(e) => {
+              setState({ ...state, name: e.target.value });
+              if (selectedItem) {
+                const updatedSelectedItem = {
+                  ...selectedItem,
+                  name: e.target.value,
+                };
+                setState((prevState) => ({
+                  ...prevState,
+                  selectedItem: updatedSelectedItem,
+                }));
+              }
+            }}
+            required
+          />
+          <TextField
+            sx={{ p: 1, m: 1 }}
+            label="Description"
+            value={description}
+            onChange={(e) => {
+              setState({ ...state, description: e.target.value });
+              if (selectedItem) {
+                const updatedSelectedItem = {
+                  ...selectedItem,
+                  description: e.target.value,
+                };
+                setState((prevState) => ({
+                  ...prevState,
+                  selectedItem: updatedSelectedItem,
+                }));
+              }
+            }}
+            required
+          />
 
-          <Box>
-            <Typography>Add API Calls: {addApiCalls}</Typography>
-            <Typography>Update API Calls: {updateApiCalls}</Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Button
+              sx={{ p: 1, m: 1 }}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              {selectedItem ? "Edit Item" : "Add Item"}
+            </Button>
+
+            <Box>
+              <Typography>Add API Calls: {addApiCalls}</Typography>
+              <Typography>Update API Calls: {updateApiCalls}</Typography>
+            </Box>
           </Box>
-        </Box>
-      </form>
-      <List>
-        {items.map((item, index) => (
-          <ListItem key={index}>
-            <ListItemText primary={item.name} secondary={item.description} />
-          </ListItem>
-        ))}
-      </List>
-    </Paper>
+        </form>
+      </Paper>
+      <Box sx={{ p: 2 }}>
+        <Paper>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Description</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {items.map((item, index) => (
+                  <TableRow
+                    key={index}
+                    onClick={() => handleItemClick(item)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.description}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      </Box>
+    </Box>
   );
 };
 

@@ -1,3 +1,9 @@
+interface Item {
+    _id?: any;
+    name: string;
+    description: string;
+}
+
 export const fetchApiCounts = async () => {
     try {
         const response = await fetch(
@@ -9,19 +15,27 @@ export const fetchApiCounts = async () => {
     }
 };
 
-export const updateItemById = async (id: string) => {
+export const fetchItems = async () => {
     try {
         const response = await fetch(
-            `https://datanueronapi.vercel.app/item/update/${id}`,
+            "https://datanueronapi.vercel.app/items/items"
+        );
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+    }
+};
+
+export const updateItemById = async (id: string, item: Item) => {
+    try {
+        const response = await fetch(
+            `https://datanueronapi.vercel.app/items/update/${id}`,
             {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    name: "Item name",
-                    description: "Item description",
-                }),
+                body: JSON.stringify(item),
             }
         );
 
