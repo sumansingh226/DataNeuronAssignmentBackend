@@ -82,3 +82,27 @@ export const getItemCount = async (req: Request, res: Response, next: NextFuncti
         res.status(500).json({ error: "Internal server error" });
     }
 };
+
+/**
+ * Fetches all items from the database.
+ * @param req - Express request object.
+ * @param res - Express response object.
+ * @param next - Express next function.
+ * @returns JSON response with the array of items or an error message.
+ */
+export const getItems = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // Find all items in the database
+        const items = await Item.find();
+
+        // Send JSON response with the array of items
+        res.json(items);
+
+        // Move to the next middleware
+        next();
+    } catch (error) {
+        // Log and handle errors
+        console.error("Error in fetching items:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
