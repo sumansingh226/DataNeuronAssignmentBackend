@@ -41,12 +41,30 @@ interface Item {
 const AddItemForm: React.FC = () => {
   const classes = useStyles();
 
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [items, setItems] = useState<Item[]>([]);
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-  const [addApiCalls, setAddApiCalls] = useState<number>(0);
-  const [updateApiCalls, setUpdateApiCalls] = useState<number>(0);
+  const [state, setState] = useState<{
+    name: string;
+    description: string;
+    items: Item[];
+    selectedItem: Item | null;
+    addApiCalls: number;
+    updateApiCalls: number;
+  }>({
+    name: "",
+    description: "",
+    items: [],
+    selectedItem: null,
+    addApiCalls: 0,
+    updateApiCalls: 0,
+  });
+
+  const {
+    name,
+    description,
+    items,
+    selectedItem,
+    addApiCalls,
+    updateApiCalls,
+  } = state;
 
   useEffect(() => {
     getApisCounts();
@@ -55,81 +73,104 @@ const AddItemForm: React.FC = () => {
   const getApisCounts = async () => {
     try {
       const data: any = await fetchApiCounts();
-      setAddApiCalls(data.addApiCount);
-      setUpdateApiCalls(data.updateApiCount);
+      setState((prevState) => ({
+        ...prevState,
+        addApiCalls: data.addApiCount,
+        updateApiCalls: data.updateApiCount,
+      }));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim() || !description.trim()) return;
-    if (selectedItem) {
-      const updatedItems = items.map((item) =>
-        item._id === selectedItem._id ? { ...item, name, description } : item
-      );
-      setItems(updatedItems);
-      setSelectedItem(null);
-      updateItemById("65d5238627968decdb2530fb");
-    } else {
-      const newItem: Item = {
-        name,
-        description,
-      };
-      setItems([...items, newItem]);
-      addItem(newItem);
+    try {
+      if (selectedItem) {
+        const updatedItems = items.map((item) =>
+          item._id === selectedItem._id ? { ...item, name, description } : item
+        );
+        setState((prevState) => ({
+          ...prevState,
+          items: updatedItems,
+          selectedItem: null,
+        }));
+        await Promise.allSettled([
+          updateItemById(selectedItem._id),
+          getApisCounts(),
+        ]);
+      } else {
+        const newItem: Item = { name, description };
+        setState((prevState) => ({
+          ...prevState,
+          items: [...items, newItem],
+        }));
+        await Promise.allSettled([addItem(newItem), getApisCounts()]);
+      }
+      setState((prevState) => ({
+        ...prevState,
+        name: "",
+        description: "",
+      }));
+    } catch (error) {
+      console.error("Error handling form submission:", error);
     }
-    setName("");
-    setDescription("");
   };
 
   const handleItemClick = (item: Item) => {
-    setSelectedItem(item);
-    setName(item.name);
-    setDescription(item.description);
+    setState((prevState) => ({
+      ...prevState,
+      selectedItem: item,
+      name: item.name,
+      description: item.description,
+    }));
   };
 
   return (
-    <Box>
-      <Paper className={classes.form} elevation={3}>
-        <Typography variant="h5">
-          {selectedItem ? "Edit Item" : "Add Item"}
-        </Typography>
-
-        <form onSubmit={handleSubmit}>
-          <TextField
+    <Paper className={classes.form} elevation={3}>
+      <Typography variant="h5">
+        {selectedItem ? "Edit Item" : "Add Item"}
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          sx={{ p: 1, m: 1 }}
+          label="Name"
+          value={name}
+          onChange={(e) => setState({ ...state, name: e.target.value })}
+          required
+        />
+        <TextField
+          sx={{ p: 1, m: 1 }}
+          label="Description"
+          value={description}
+          onChange={(e) => setState({ ...state, description: e.target.value })}
+          required
+        />
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Button
             sx={{ p: 1, m: 1 }}
-            label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <TextField
-            sx={{ p: 1, m: 1 }}
-            label="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Button
-              sx={{ p: 1, m: 1 }}
-              type="submit"
-              variant="contained"
-              color="primary"
-            >
-              {selectedItem ? "Edit Item" : "Add Item"}
-            </Button>
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            {selectedItem ? "Edit Item" : "Add Item"}
+          </Button>
 
-            <Box>
-              <Typography>Add API Calls: {addApiCalls}</Typography>
-              <Typography>Update API Calls: {updateApiCalls}</Typography>
-            </Box>
+          <Box>
+            <Typography>Add API Calls: {addApiCalls}</Typography>
+            <Typography>Update API Calls: {updateApiCalls}</Typography>
           </Box>
-        </form>
-      </Paper>
-    </Box>
+        </Box>
+      </form>
+      <List>
+        {items.map((item, index) => (
+          <ListItem key={index}>
+            <ListItemText primary={item.name} secondary={item.description} />
+          </ListItem>
+        ))}
+      </List>
+    </Paper>
   );
 };
 
