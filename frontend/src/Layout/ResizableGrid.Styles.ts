@@ -2,13 +2,16 @@
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
-    resizable: {
-        position: "absolute",
-        border: "1px solid #ccc",
-        backgroundColor: "#f0f0f0",
-        overflow: "hidden",
+    resizableBox: {
         resize: "both",
-        cursor: "nwse-resize",
+        overflow: "auto",
+        border: "1px solid #ccc",
+        padding: "8px",
+        margin: "8px",
+        minWidth: "100px",
+        minHeight: "100px",
+        maxWidth: "400px",
+        maxHeight: "400px",
     },
     handle: {
         position: "absolute",
