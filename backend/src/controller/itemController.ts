@@ -93,7 +93,7 @@ export const getItemCount = async (req: Request, res: Response, next: NextFuncti
 export const getItems = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Find all items in the database
-        const items = await Item.find();
+        const items = await Item.find().sort({ _id: -1 });
 
         // Send JSON response with the array of items
         res.json(items);
