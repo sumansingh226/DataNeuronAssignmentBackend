@@ -19,14 +19,14 @@ app.use(cors({
 app.use(express.json());
 
 
+
+
 // Home route
 app.get("/", (req, res) => {
     res.send("Welcome! to express....");
 });
-
 // Mount the itemsRouter at the '/items' path
 app.use("/items", itemsRouter);
-
 
 // Define the port to listen on, defaulting to 50000 if not specified in the environment
 const PORT = process.env.PORT || 5000;

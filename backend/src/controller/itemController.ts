@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ApiCounts } from "../models/apiCountModel";
 import { Item } from "../models/itemModel";
 
@@ -9,7 +9,7 @@ import { Item } from "../models/itemModel";
  * @returns A JSON object containing the saved item.
  * @throws 500 - Internal Server Error if the item creation fails.
  */
-export const addItem = async (req: Request, res: Response) => {
+export const addItem = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Increment addApiCount
         const countUpdate = await ApiCounts.updateOne(
@@ -23,7 +23,8 @@ export const addItem = async (req: Request, res: Response) => {
         // Create and save new item
         const product = new Item({ ...req.body });
         const result = await product.save();
-        return res.status(201).json(result); // Sending the saved item in the response
+        res.json(result); // Sending the saved item in the response
+        return next();
     } catch (error) {
         console.log("Error creating item", error);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -38,7 +39,7 @@ export const addItem = async (req: Request, res: Response) => {
  * @returns A JSON object containing the updated item.
  * @throws 500 - Internal Server Error if the update fails.
  */
-export const updateitem = async (req: Request, res: Response) => {
+export const updateitem = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { name, description }: { name: string; description: string } = req.body;
     const payload = { name, description };
@@ -55,7 +56,8 @@ export const updateitem = async (req: Request, res: Response) => {
         const result: any = await Item.findByIdAndUpdate(id, payload, {
             new: false,
         });
-        return res.json(result); // Sending the updated item in the response
+        res.json(result); // Sending the updated item in the response
+        return next();
     } catch (error) {
         console.error("Error updating item:", error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -70,10 +72,11 @@ export const updateitem = async (req: Request, res: Response) => {
  * @returns A JSON object containing the item count.
  * @throws 500 - Internal Server Error if the count retrieval fails.
  */
-export const getItemCount = async (req: Request, res: Response) => {
+export const getItemCount = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const [itemCount] = await ApiCounts.find();
-        return res.json(itemCount);
+        res.json(itemCount);
+        next();
     } catch (error) {
         console.error("Error in /count route:", error);
         res.status(500).json({ error: "Internal server error" });
