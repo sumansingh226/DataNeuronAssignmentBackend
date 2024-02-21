@@ -7,9 +7,6 @@ import cors from "cors";
 // Load environment variables from .env file
 dotenv.config();
 
-
-
-
 // Create an Express application
 const app = express();
 
