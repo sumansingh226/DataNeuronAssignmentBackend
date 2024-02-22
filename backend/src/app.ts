@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: "https://incandescent-sunshine-b262cf.netlify.app"
+    origin: "https://65d7419828d8861eeed37f10--eclectic-crostata-da59b8.netlify.app/"
 }));
 
 
