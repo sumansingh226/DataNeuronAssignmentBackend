@@ -199,7 +199,7 @@ const AddItemForm: React.FC = () => {
             </Box>
           </form>
         </Paper>
-        <Box sx={{ p: 2, width: "100%", maxWidth: "500px" }}>
+        <Box sx={{ p: 2, width: "100%", maxWidth: "480px" }}>
           <Paper className={classes.itemList}>
             <TableContainer>
               <Table>

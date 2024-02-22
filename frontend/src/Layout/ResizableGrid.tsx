@@ -20,11 +20,12 @@ const ResizableDraggableBox = () => {
       p={2}
       sx={{ background: "red", width: "100vw", height: "100vh" }}
     >
-      <Grid item xs={4}>
+      <Grid item xs={6}>
         <Draggable>
           <Resizable
+            style={{ border: "1px solid gray" }}
             defaultSize={{
-              width: 700,
+              width: 520,
               height: 600,
             }}
           >
@@ -32,7 +33,7 @@ const ResizableDraggableBox = () => {
           </Resizable>
         </Draggable>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <Draggable>
           <Resizable
             style={style}
@@ -45,7 +46,7 @@ const ResizableDraggableBox = () => {
           </Resizable>
         </Draggable>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <Draggable>
           <Resizable
             style={style}
