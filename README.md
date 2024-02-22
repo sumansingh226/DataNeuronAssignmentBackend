@@ -7,7 +7,7 @@ This project consists of two tasks: a UI task and an API task.
 - Users can resize the components by dragging them from any side.
 - The neighbor components expand or shrink based on resizing operations.
 - The layout is responsive on all laptop devices.
-- Open-source library used: [Insert Library Name]
+- Open-source library used:  react-draagble and re-resizable,
 
 ## API Task
 - API to add/edit data in the components.
@@ -17,16 +17,16 @@ This project consists of two tasks: a UI task and an API task.
 - Count API shows the number of times the user has called the Add and Update APIs.
 
 ## Deployment
-Both the UI and API tasks are deployed and can be accessed at [Insert Deployment Links].
+Both the UI and API tasks are deployed and can be accessed at https://incandescent-sunshine-b262cf.netlify.app/.
 
 ## Execution Time
-- Add API: [Insert Execution Time]
-- Update API: [Insert Execution Time]
-- Count API: [Insert Execution Time]
+- Add API: 78ms.
+- Update API: 82ms.
+- Count API: 79ms.
 
 ## Database
-- Database: [Insert Database Name]
-- Collection/Table: [Insert Collection/Table Name]
+- Database: DataNeuron
+- Collection/Table: Item and Count
 
 ## Clean Code and Comments
 The code is clean and well-commented for easy understanding and maintenance.
@@ -35,9 +35,9 @@ The code is clean and well-commented for easy understanding and maintenance.
 Basic validations are implemented where needed.
 
 ## Technologies Used
-- Frontend: ReactJS
-- Backend: Node.js, Express
-- Database: [Insert Database Name]
+- Frontend: ReactJS, Mui
+- Backend: Node.js, Express, TypeScript
+- Database: MongoDB,
 
 ## Setup Instructions
 1. Clone the repository.
