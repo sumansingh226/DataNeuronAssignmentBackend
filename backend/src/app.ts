@@ -12,8 +12,9 @@ const app = express();
 
 // Allow requests from localhost:3000
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: ["http://localhost:3000", "https://incandescent-sunshine-b262cf.netlify.app/"]
 }));
+
 
 // Middleware to parse JSON bodies
 app.use(express.json());
