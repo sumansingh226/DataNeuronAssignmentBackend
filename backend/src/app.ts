@@ -10,13 +10,10 @@ dotenv.config();
 // Create an Express application
 const app = express();
 
-// app.use(cors({
-//     // origin: "https://eclectic-crostata-da59b8.netlify.app"
-//     origin: "http://localhost:3000"
-// }));
+//define origin
 
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "https://inquisitive-arithmetic-00f97d.netlify.app/"
 }));
 
 
