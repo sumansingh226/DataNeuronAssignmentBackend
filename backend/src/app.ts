@@ -13,7 +13,7 @@ const app = express();
 //define origin
 
 app.use(cors({
-    origin: ""
+    origin: "https://joyful-pixie-e695d6.netlify.app"
 }));
 
 
