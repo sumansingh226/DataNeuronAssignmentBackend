@@ -13,7 +13,7 @@ const app = express();
 //define origin
 
 app.use(cors({
-    origin: "https://inquisitive-arithmetic-00f97d.netlify.app/"
+    origin: ""
 }));
 
 
