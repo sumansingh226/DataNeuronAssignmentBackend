@@ -1,7 +1,7 @@
 import React from "react";
 import { Resizable } from "re-resizable";
 import Draggable from "react-draggable";
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, Box } from "@mui/material";
 import AddItemForm from "../Forms/AddItem";
 
 const style = {
@@ -14,52 +14,50 @@ const style = {
 
 const ResizableDraggableBox = () => {
   return (
-    <Grid
-      container
-      spacing={2}
-      p={2}
-      sx={{ background: "red", width: "100vw", height: "100vh" }}
-    >
-      <Grid item xs={6}>
-        <Draggable>
-          <Resizable
-            style={{ border: "1px solid gray" }}
-            defaultSize={{
-              width: 520,
-              height: 600,
-            }}
-          >
-            <AddItemForm />
-          </Resizable>
-        </Draggable>
+    <Box>
+      <Grid container spacing={2} p={2}>
+        <Grid item xs={6}>
+          <Draggable>
+            <Resizable
+              style={style}
+              defaultSize={{
+                width: 200,
+                height: 200,
+              }}
+            >
+              <Paper>Box 1</Paper>
+            </Resizable>
+          </Draggable>
+        </Grid>
+        <Grid item xs={3}>
+          <Draggable>
+            <Resizable
+              style={style}
+              defaultSize={{
+                width: 200,
+                height: 200,
+              }}
+            >
+              <Paper>Box 1</Paper>
+            </Resizable>
+          </Draggable>
+        </Grid>
+        <Grid item xs={3}>
+          <Draggable>
+            <Resizable
+              style={style}
+              defaultSize={{
+                width: 200,
+                height: 200,
+              }}
+            >
+              <Paper>Box 2</Paper>
+            </Resizable>
+          </Draggable>
+        </Grid>
       </Grid>
-      <Grid item xs={3}>
-        <Draggable>
-          <Resizable
-            style={style}
-            defaultSize={{
-              width: 200,
-              height: 200,
-            }}
-          >
-            <Paper>Box 1</Paper>
-          </Resizable>
-        </Draggable>
-      </Grid>
-      <Grid item xs={3}>
-        <Draggable>
-          <Resizable
-            style={style}
-            defaultSize={{
-              width: 200,
-              height: 200,
-            }}
-          >
-            <Paper>Box 2</Paper>
-          </Resizable>
-        </Draggable>
-      </Grid>
-    </Grid>
+      <AddItemForm />
+    </Box>
   );
 };
 

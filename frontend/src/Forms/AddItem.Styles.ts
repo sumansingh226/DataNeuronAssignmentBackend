@@ -20,9 +20,8 @@ const useStyles = makeStyles({
     },
     container: {
         display: "flex",
-        justifyContent: "space-between",
         alignItems: "flex-start",
-        flexDirection: "column",
+        flexDirection: "row",
     },
 });
 

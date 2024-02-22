@@ -148,7 +148,7 @@ const AddItemForm: React.FC = () => {
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField
-              sx={{ p: 1, m: 1 }}
+              sx={{ p: 0.5, m: 0.5 }}
               label="Name"
               value={name}
               onChange={(e) => {
@@ -167,7 +167,7 @@ const AddItemForm: React.FC = () => {
               required
             />
             <TextField
-              sx={{ p: 1, m: 1 }}
+              sx={{ p: 0.5, m: 0.5 }}
               label="Description"
               value={description}
               onChange={(e) => {
@@ -186,7 +186,7 @@ const AddItemForm: React.FC = () => {
               required
             />
             <Button
-              sx={{ p: 1, m: 1 }}
+              sx={{ p: 0.5, m: 0.5 }}
               type="submit"
               variant="contained"
               color="primary"
@@ -199,7 +199,7 @@ const AddItemForm: React.FC = () => {
             </Box>
           </form>
         </Paper>
-        <Box sx={{ p: 2, width: "100%", maxWidth: "480px" }}>
+        <Box sx={{ p: 2, width: "100%", maxWidth: "480px" }} mt={2}>
           <Paper className={classes.itemList}>
             <TableContainer>
               <Table>
