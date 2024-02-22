@@ -11,7 +11,8 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: "https://eclectic-crostata-da59b8.netlify.app"
+    // origin: "https://eclectic-crostata-da59b8.netlify.app"
+    origin: "http://localhost:3000/"
 }));
 
 
