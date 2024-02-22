@@ -63,7 +63,7 @@ const AddItemForm: React.FC = () => {
 
   useEffect(() => {
     fetchInitialData();
-  }, [addApiCalls, updateApiCalls, items]);
+  }, [state.addApiCalls, state.updateApiCalls, state.selectedItem]);
 
   const fetchInitialData = async () => {
     try {
@@ -119,7 +119,8 @@ const AddItemForm: React.FC = () => {
           ...prevState,
           items: [...items, newItem],
         }));
-        await Promise.allSettled([addItem(newItem), fetchInitialData()]);
+        await addItem(newItem);
+        await fetchInitialData();
       }
       setState((prevState) => ({
         ...prevState,
