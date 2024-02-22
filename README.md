@@ -17,7 +17,7 @@ This project consists of two tasks: a UI task and an API task.
 - Count API shows the number of times the user has called the Add and Update APIs.
 
 ## Deployment
-Both the UI and API tasks are deployed and can be accessed at https://incandescent-sunshine-b262cf.netlify.app/.
+Both the UI and API tasks are deployed and can be accessed at  https://joyful-pixie-e695d6.netlify.app/
 
 ## Execution Time
 - Add API: 78ms.
