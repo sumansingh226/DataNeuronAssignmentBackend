@@ -199,7 +199,7 @@ const AddItemForm: React.FC = () => {
             </Box>
           </form>
         </Paper>
-        <Box sx={{ p: 2, width: "100%" }}>
+        <Box sx={{ p: 2, width: "100%", maxWidth: "500px" }}>
           <Paper className={classes.itemList}>
             <TableContainer>
               <Table>
@@ -211,7 +211,10 @@ const AddItemForm: React.FC = () => {
                 </TableHead>
                 <TableBody>
                   {items
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
                     .map((item, index) => (
                       <TableRow
                         key={index}
@@ -228,7 +231,7 @@ const AddItemForm: React.FC = () => {
             <TablePagination
               rowsPerPageOptions={[5]}
               component="div"
-              count={items.length}
+              count={items?.length ?? 0}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

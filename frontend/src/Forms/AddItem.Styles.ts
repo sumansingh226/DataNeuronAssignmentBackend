@@ -5,7 +5,7 @@ const useStyles = makeStyles({
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
-        maxWidth: "400px",
+        maxWidth: "430px",
         marginTop: "2rem",
         marginLeft: "1rem",
         padding: "2rem",
@@ -22,6 +22,7 @@ const useStyles = makeStyles({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-start",
+        flexDirection: "column",
     },
 });
 
