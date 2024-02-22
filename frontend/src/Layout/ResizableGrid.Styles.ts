@@ -1,44 +1,58 @@
 
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
-    resizableBox: {
-        resize: "both",
-        overflow: "auto",
-        border: "1px solid #ccc",
-        padding: "8px",
-        margin: "8px",
-        minWidth: "100px",
-        minHeight: "100px",
-        maxWidth: "400px",
-        maxHeight: "400px",
+    container: {
+        borderRadius: 5,
+        width: '100vw',
+        height: '100vh',
+        position: 'relative',
     },
-    handle: {
-        position: "absolute",
-        width: 10,
-        height: 10,
-        backgroundColor: "#ccc",
+    resizeable: {
+        position: 'absolute',
+        border: '2px solid #533535',
+        width: 100,
+        height: 100,
+        borderRadius: 3,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minWidth: 15,
+        minHeight: 15,
     },
-    topLeft: {
-        top: -5,
-        left: -5,
-        cursor: "nwse-resize",
+    resizer: {
+        position: 'absolute',
+        background: 'black',
     },
-    topRight: {
-        top: -5,
-        right: -5,
-        cursor: "nesw-resize",
+    resizerR: {
+        cursor: 'col-resize',
+        height: '100%',
+        right: 0,
+        top: 0,
+        width: 5,
     },
-    bottomLeft: {
-        bottom: -5,
-        left: -5,
-        cursor: "nesw-resize",
+    resizerT: {
+        cursor: 'row-resize',
+        height: 5,
+        left: 0,
+        top: 0,
+        width: '100%',
     },
-    bottomRight: {
-        bottom: -5,
-        right: -5,
-        cursor: "nwse-resize",
+    resizerB: {
+        cursor: 'row-resize',
+        height: 5,
+        left: 0,
+        bottom: 0,
+        width: '100%',
     },
+    resizerL: {
+        cursor: 'col-resize',
+        height: '100%',
+        left: 0,
+        top: 0,
+        width: 5,
+    },
+
 }));
 
-export default useStyles
+export default useStyles;
