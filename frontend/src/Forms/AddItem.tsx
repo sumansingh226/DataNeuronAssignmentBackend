@@ -13,38 +13,13 @@ import {
   Box,
   TablePagination,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import {
   addItem,
   fetchApiCounts,
   fetchItems,
   updateItemById,
 } from "./AddItemServices";
-
-const useStyles = makeStyles({
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-    maxWidth: "400px",
-    marginTop: "2rem",
-    marginLeft: "1rem",
-    padding: "2rem",
-    marginBottom: 1,
-  },
-  itemList: {
-    border: "1px solid gray",
-    padding: "1rem",
-  },
-  listItem: {
-    cursor: "pointer",
-  },
-  container: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-});
+import useStyles from "./AddItem.Styles";
 
 interface Item {
   _id?: any;
