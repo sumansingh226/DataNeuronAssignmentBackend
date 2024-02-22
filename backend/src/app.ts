@@ -10,14 +10,9 @@ dotenv.config();
 // Create an Express application
 const app = express();
 
-// Allow requests from localhost:3000
-// app.use(cors({
-//     origin: ["http://localhost:3000", "https://incandescent-sunshine-b262cf.netlify.app/"]
-// }));
 app.use(cors({
-    origin: "*"
+    origin: "https://incandescent-sunshine-b262cf.netlify.app"
 }));
-
 
 
 // Middleware to parse JSON bodies
