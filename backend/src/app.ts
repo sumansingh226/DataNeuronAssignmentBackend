@@ -11,9 +11,13 @@ dotenv.config();
 const app = express();
 
 // Allow requests from localhost:3000
+// app.use(cors({
+//     origin: ["http://localhost:3000", "https://incandescent-sunshine-b262cf.netlify.app/"]
+// }));
 app.use(cors({
-    origin: ["http://localhost:3000", "https://incandescent-sunshine-b262cf.netlify.app/"]
+    origin: "*"
 }));
+
 
 
 // Middleware to parse JSON bodies
