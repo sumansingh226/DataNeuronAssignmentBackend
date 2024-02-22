@@ -73,8 +73,8 @@ const AddItemForm: React.FC = () => {
       ]);
       setState((prevState) => ({
         ...prevState,
-        addApiCalls: apiCounts.addApiCount,
-        updateApiCalls: apiCounts.updateApiCount,
+        addApiCalls: apiCounts?.addApiCount ?? 0,
+        updateApiCalls: apiCounts?.updateApiCount ?? 0,
         items: allItems,
       }));
     } catch (error) {
