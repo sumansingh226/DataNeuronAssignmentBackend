@@ -3,37 +3,23 @@ import dotenv from "dotenv";
 import { connectDb } from "./dbConfig/db";
 import itemsRouter from "./routes/itemRoutes";
 import cors from "cors";
-
-// Load environment variables from .env file
 dotenv.config();
 
-// Create an Express application
 const app = express();
-
-//define origin
 
 app.use(cors({
     origin: "https://joyful-pixie-e695d6.netlify.app"
 }));
 
-
-// Middleware to parse JSON bodies
 app.use(express.json());
 
-
-
-
-// Home route
 app.get("/", (req, res) => {
     res.send("Welcome! to express....");
 });
-// Mount the itemsRouter at the '/items' path
 app.use("/items", itemsRouter);
 
-// Define the port to listen on, defaulting to 50000 if not specified in the environment
 const PORT = process.env.PORT || 5000;
 
-// Connect to the database and start the server
 const startServer = async () => {
     try {
         await connectDb();
@@ -45,7 +31,6 @@ const startServer = async () => {
     }
 };
 
-// Start the server
 startServer();
 
 // Handle uncaught exceptions and unhandled rejections

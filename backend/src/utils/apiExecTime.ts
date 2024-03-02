@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 
-
-
 export const startTimeMiddleware = (req: any, res: Response, next: NextFunction) => {
     req.startTime = new Date();
     next();
