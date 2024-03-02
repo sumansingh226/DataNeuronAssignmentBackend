@@ -17,6 +17,6 @@ const ApiCountSchema: Schema<ApiCount> = new Schema<ApiCount>(
         },
     },
     { versionKey: false }
-); // Disable versionKey
+);
 
 export const ApiCounts = model<ApiCount>("ApiCounts", ApiCountSchema);
