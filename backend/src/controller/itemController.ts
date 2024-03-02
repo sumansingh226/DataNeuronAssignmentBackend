@@ -11,7 +11,6 @@ import { Item } from "../models/itemModel";
  */
 export const addItem = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        // Increment addApiCount
         const countUpdate = await ApiCounts.updateOne(
             {},
             { $inc: { addApiCount: 1 } },
@@ -20,10 +19,9 @@ export const addItem = async (req: Request, res: Response, next: NextFunction) =
         if (!countUpdate) {
             throw new Error("Failed to update count.");
         }
-        // Create and save new item
         const product = new Item({ ...req.body });
         const result = await product.save();
-        res.json(result); // Sending the saved item in the response
+        res.json(result);
         return next();
     } catch (error) {
         console.log("Error creating item", error);
@@ -44,7 +42,6 @@ export const updateitem = async (req: Request, res: Response, next: NextFunction
     const { name, description }: { name: string; description: string } = req.body;
     const payload = { name, description };
     try {
-        // Increment updateApiCount
         const countUpdate = await ApiCounts.updateOne(
             {},
             { $inc: { updateApiCount: 1 } },
@@ -56,10 +53,9 @@ export const updateitem = async (req: Request, res: Response, next: NextFunction
         const result: any = await Item.findByIdAndUpdate(id, payload, {
             new: false,
         });
-        res.json(result); // Sending the updated item in the response
+        res.json(result);
         return next();
     } catch (error) {
-        console.error("Error updating item:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
@@ -92,17 +88,10 @@ export const getItemCount = async (req: Request, res: Response, next: NextFuncti
  */
 export const getItems = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        // Find all items in the database
         const items = await Item.find().sort({ _id: -1 });
-
-        // Send JSON response with the array of items
         res.json(items);
-
-        // Move to the next middleware
         next();
     } catch (error) {
-        // Log and handle errors
-        console.error("Error in fetching items:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
